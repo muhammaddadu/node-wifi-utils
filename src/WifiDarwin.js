@@ -56,7 +56,7 @@ export default class WifiDarwin extends Wifi {
 				mac : row[1],
 				rssi : row[2],
 				channels : row[3] && row[3].split(','),
-				securityTypes : String(row[6] || row[5] && row[5].replace('-- ', '')).split(' '),
+				securityTypes : String(row[6] || row[5] && row[5].replace('-- ', '')).split(' ')
 			};
 
 			debug('accessPoint: %s', JSON.stringify(accessPoint));
