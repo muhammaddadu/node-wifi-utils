@@ -2,6 +2,7 @@
  * Test for Execute
  */
 import Wifi from '..';
+import WifiDarwin from '../dist/WifiDarwin';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -9,9 +10,8 @@ const samepleResultsPath = path.join(__dirname, 'mocks/darwinScan.txt');
 const samepleResults = fs.readFileSync(samepleResultsPath);
 
 describe('Scan test', function () {
-
-	it('test platform scan result parse', function () {
-		let accessPoints = Wifi.parseScan(samepleResults);
+	it('[mac] test platform scan result parse', function () {
+		let accessPoints = WifiDarwin.parseScan(samepleResults);
 		accessPoints.forEach((row) => {
 			expect(row.ssid).not.equal(undefined);
 			expect(row.mac).not.equal(undefined);

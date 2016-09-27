@@ -32,6 +32,15 @@ wifi.location()
     });
 ```
 
+## Testing
+Testing can be run on the host operating system using ```npm test```.
+
+To test this project in a Linux enviroment, a Dockerfile is provided.
+```
+docker build -t muhammaddadu/node-wifi-utils .
+docker run muhammaddadu/node-wifi-utils
+```
+
 ## Licence
 Copyright (c) 2016 Muhammad Dadu
 

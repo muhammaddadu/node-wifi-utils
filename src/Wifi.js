@@ -2,8 +2,10 @@
  * Wifi
  * @author  Muhammad Dadu
  */
-import request from 'request';
 import Debug from 'debug';
+import request from 'request';
+import * as childProcess from 'child_process';
+import _extend from 'util';
 
 const debug = Debug('node-wifi-utils:Wifi');
 
@@ -13,6 +15,7 @@ const debug = Debug('node-wifi-utils:Wifi');
  */
 export default class Wifi {
 	static platform: String;
+	static scanCmd: String;
 
 	/**
 	 * Scan surrounding WiFi access points
@@ -20,7 +23,22 @@ export default class Wifi {
 	 */
 	static scan(): Promise {
 		return new Promise((resolve, reject) => {
-			reject('this method has not been implemented');
+			if (!this.scanCmd) {
+				return reject('Platform not supported');
+			}
+
+			debug('running command %s', this.scanCmd);
+			childProcess.exec(this.scanCmd, _extend(process.env, {
+				LANG: 'en'
+			}), (err, stdout, stderr) => {
+				if (err) {
+					debug('error: %s', err);
+					return reject(err);
+				}
+				debug('stdout: %s', stdout);
+				debug('stderr: %s', stderr);
+				return resolve(this.parseScan(stdout));
+			});
 		});
 	}
 
@@ -41,7 +59,6 @@ export default class Wifi {
 	static locationFromAccessPoints(accessPoints: Array): Promise {
 		return new Promise((resolve, reject) => {
 			let url = 'https://maps.googleapis.com/maps/api/browserlocation/json';
-
 			url += '?browser=node-wifi-utils&sensor=true&wifi=';
 			url += accessPoints.map((accessPoint) => {
 				return [
